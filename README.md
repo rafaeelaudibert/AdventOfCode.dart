@@ -1,6 +1,6 @@
 # AdventOfCode 2019 - Dart
 
-Repository containing the solutions for [2019 AOC] in Dart.
+Repository containing the solutions for [2019 AOC](https://adventofcode.com/2019) in Dart.
 
 ## Usage
 
