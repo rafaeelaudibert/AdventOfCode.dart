@@ -34,6 +34,7 @@ main(List<String> arguments) {
         File('lib/data/day_${day}_1.txt'); // By default, only part 1 file
     var codeFile = File('lib/src/day_${day}.dart');
     var exportFile = File('lib/advent_of_code.dart');
+    var markdownFile = File('lib/docs/day_$day.md');
 
     // Create files if not existent
     if (!dataFile.existsSync()) dataFile.create(recursive: true);
@@ -44,12 +45,10 @@ main(List<String> arguments) {
       exportFile.writeAsStringSync('export \'src/day_$day.dart\';\n',
           mode: FileMode.append);
     }
+    if (!markdownFile.existsSync()) markdownFile.create(recursive: true);
 
     // Write code to file
     codeFile.writeAsStringSync(generateCode(day));
-
-    // Add export value
-
   } on FormatException catch (_) {
     print('Please enter valid number for <year> <day>');
   } on ArgumentError catch (_) {
