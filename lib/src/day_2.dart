@@ -16,20 +16,14 @@ int day_2_part_1({noun = 12, verb = 2}) {
   data[2] = verb;
 
   int counter = 0;
-  while (counter < data.length) {
+  while (data[counter] != 99) {
     int opcode = data[counter];
     int load_1 = data[counter + 1];
     int load_2 = data[counter + 2];
     int store = data[counter + 3];
 
-    if (opcode == 99) break;
-
-    if (opcode == 1) {
-      data[store] = data[load_1] + data[load_2];
-    } else if (opcode == 2) {
-      data[store] = data[load_1] * data[load_2];
-    }
-
+    data[store] =
+        opcode == 1 ? data[load_1] + data[load_2] : data[load_1] * data[load_2];
     counter += 4;
   }
 
