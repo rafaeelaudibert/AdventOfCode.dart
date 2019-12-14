@@ -5,3 +5,4 @@ export 'src/day_2.dart';
 export 'src/day_3.dart';
 export 'src/day_4.dart';
 export 'src/day_5.dart';
+export 'src/day_6.dart';
