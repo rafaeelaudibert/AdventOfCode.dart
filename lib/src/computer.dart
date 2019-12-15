@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 /// Code for the IntCode computer for 2019 AoC.
 ///
 /// The AoC description can be seen [here](https://adventofcode.com/2019)
@@ -17,6 +19,7 @@ class Computer {
   int _PC = 0;
   List<int> _originalCode = [];
   List<int> _code = [];
+  Queue<int> _inputs = Queue();
 
   // Constructors
   Computer({List<int> code}) {
@@ -30,25 +33,27 @@ class Computer {
     this._PC = PC;
   }
 
-  // Opcode getters
+  // Opcode and input getters
   String get _full_opcode => _code[_PC].toString().padLeft(5, '0');
   int get _opcode => int.parse(_full_opcode.substring(3));
+  int get _input => this._inputs.removeFirst();
 
   // Read value from memory
-  int _get(addr, mode) =>
+  int _get(int addr, int mode) =>
       mode == DIRECT_MODE ? _code[addr] : _code[_code[addr]];
-  int _set(addr, value) => _code[addr] = value;
+  int _set(int addr, int value) => _code[addr] = value;
 
   // Configure PC
-  void _setPC(val) => _PC = val;
-  void _increasePC(val) => _setPC(_PC + val);
+  void _setPC(int val) => _PC = val;
+  void _increasePC(int val) => _setPC(_PC + val);
 
   // Public functions
+  bool get halted => _code[_PC] == HALT_INSTRUCTION;
   void resetPC() => _setPC(0);
   void resetCode() => _code = _originalCode.toList();
-  bool get halted => _code[_PC] == HALT_INSTRUCTION;
+  void addInput(int input_value) => _inputs.addLast(input_value);
 
-  int step(input) {
+  int step() {
     // Read modes earlier
     int first_mode = int.parse(this._full_opcode[2]);
     int second_mode = int.parse(this._full_opcode[1]);
@@ -72,7 +77,7 @@ class Computer {
         this._increasePC(4);
         break;
       case 3: // Input
-        this._set(this._get(_PC + 1, DIRECT_MODE), input);
+        this._set(this._get(_PC + 1, DIRECT_MODE), _input);
         this._increasePC(2);
         break;
       case 4: // Output

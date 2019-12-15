@@ -2,6 +2,7 @@
 ///
 /// Problem description can be seen [here](https://adventofcode.com/2019/day/5)
 import 'package:advent_of_code/helpers.dart';
+import 'computer.dart';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
@@ -24,7 +25,15 @@ List<List<int>> generateSettings(int low) {
 }
 
 int day_7_part_1() {
+  var data = _processInput();
   var phase_settings = generateSettings(0);
+  var computers = [
+    Computer(code: data),
+    Computer(code: data),
+    Computer(code: data),
+    Computer(code: data),
+    Computer(code: data)
+  ];
 
   int maximum = 0;
   for (var phase_setting in phase_settings) {

@@ -12,10 +12,11 @@ List<int> _processInput() =>
 int day_5_part_1({int input = 1}) => day_5_part_2(input: input);
 
 int day_5_part_2({int input = 5}) {
-  Computer intMachine = Computer(code: _processInput());
+  Computer intMachine = Computer(code: _processInput())..addInput(input);
   int last_output = null;
+
   while (!intMachine.halted) {
-    int output = intMachine.step(input);
+    int output = intMachine.step();
 
     if (output != null) {
       last_output = output;
