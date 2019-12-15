@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// Code for the solution of 2019 AoC, day 7.
 ///
 /// Problem description can be seen [here](https://adventofcode.com/2019/day/5)
@@ -48,83 +50,27 @@ int day_7_part_1() {
   return maximum;
 }
 
-int compute_thruster(input_1, input_2) {
-  // Private function
-  int get_parameter(offset, mode, data, counter) =>
-      mode == 0 ? data[data[counter + offset]] : data[counter + offset];
-
+day_7_part_2() {
   var data = _processInput();
-  int counter = 0;
-  bool send_input_1 = true;
+  var phase_settings = generateSettings(5);
 
-  while (data[counter] != 99) {
-    String full_opcode = data[counter].toString().padLeft(5, '0');
-    int first_mode = int.parse(full_opcode[2]);
-    int second_mode = int.parse(full_opcode[1]);
-    // int third_mode = int.parse(full_opcode[0]); // Not actually used
-    int opcode = int.parse(full_opcode.substring(3));
+  int maximum = 0;
+  for (var phase_setting in phase_settings) {
+    // Create computers
+    var computers = phase_setting
+        .map((setting) => Computer(code: data)..addInput(setting))
+        .toList();
 
-    switch (opcode) {
-      case 1: // Add
-        int param_1 = get_parameter(1, first_mode, data, counter);
-        int param_2 = get_parameter(2, second_mode, data, counter);
-        data[data[counter + 3]] = param_1 + param_2;
-        counter += 4;
-        break;
-      case 2: // Multiply
-        int param_1 = get_parameter(1, first_mode, data, counter);
-        int param_2 = get_parameter(2, second_mode, data, counter);
-        data[data[counter + 3]] = param_1 * param_2;
-        counter += 4;
-        break;
-      case 3: // Input
-        data[data[counter + 1]] = send_input_1 ? input_1 : input_2;
-        send_input_1 = false; // Prepare for next input
-        counter += 2;
-        break;
-      case 4: // Output
-        return data[data[counter + 1]];
-      case 5: // Jump if true
-        int param_1 = get_parameter(1, first_mode, data, counter);
+    // Generate output
+    int output = 0;
+    while (!computers[0].halted)
+      output = computers.fold(
+          output,
+          (acc, computer) =>
+              (computer..addInput(acc)).step_until_output() ?? output);
 
-        if (param_1 != 0) {
-          counter = get_parameter(2, second_mode, data, counter);
-        } else {
-          counter += 3;
-        }
-        break;
-      case 6: // Jump if false
-        int param_1 = get_parameter(1, first_mode, data, counter);
-
-        if (param_1 == 0) {
-          counter = get_parameter(2, second_mode, data, counter);
-        } else {
-          counter += 3;
-        }
-        break;
-      case 7: // Less than
-        int param_1 = get_parameter(1, first_mode, data, counter);
-        int param_2 = get_parameter(2, second_mode, data, counter);
-
-        data[data[counter + 3]] = param_1 < param_2 ? 1 : 0;
-        counter += 4;
-        break;
-      case 8: // Equals
-        int param_1 = get_parameter(1, first_mode, data, counter);
-        int param_2 = get_parameter(2, second_mode, data, counter);
-
-        data[data[counter + 3]] = param_1 == param_2 ? 1 : 0;
-        counter += 4;
-        break;
-      default:
-        throw 'Not a good place to be';
-    }
+    maximum = max(maximum, output);
   }
 
-  throw 'Shouldn\'t be here';
-}
-
-// Not implemented
-day_7_part_2() {
-  throw UnimplementedError();
+  return maximum;
 }
