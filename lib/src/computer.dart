@@ -48,10 +48,23 @@ class Computer {
   void _increasePC(int val) => _setPC(_PC + val);
 
   // Public functions
-  bool get halted => _code[_PC] == HALT_INSTRUCTION;
-  void resetPC() => _setPC(0);
-  void resetCode() => _code = _originalCode.toList();
+  bool get halted => _opcode == HALT_INSTRUCTION;
   void addInput(int input_value) => _inputs.addLast(input_value);
+  void resetPC() => _setPC(0);
+  void reset() {
+    _code = _originalCode.toList();
+    resetPC();
+    this._inputs.clear();
+  }
+
+  int step_until_output() {
+    while (!halted) {
+      int output = this.step();
+      if (output != null) return output;
+    }
+
+    return null;
+  }
 
   int step() {
     // Read modes earlier
@@ -112,8 +125,12 @@ class Computer {
         this._set(this._get(_PC + 3, DIRECT_MODE), param_1 == param_2 ? 1 : 0);
         this._increasePC(4);
         break;
+      case HALT_INSTRUCTION:
+        print("Halted");
+        break;
       default:
-        throw 'Not a good place to be';
+        print(_opcode);
+        throw 'Invalid opcode';
     }
 
     return output;

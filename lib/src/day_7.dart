@@ -9,46 +9,40 @@ import 'computer.dart';
 List<int> _processInput() =>
     readFromFiles(day: 7, part: 1).split(',').map((i) => int.parse(i)).toList();
 
-// Global range helper
-const range = [0, 1, 2, 3, 4];
+// Global ranges helper
+List<int> range(int start, int end) =>
+    new List<int>.generate(end - start, (i) => i + start);
 
 List<List<int>> generateSettings(int low) {
   var phase_settings = List<List<int>>();
-  for (var i in range)
-    for (var j in range)
-      for (var k in range)
-        for (var l in range)
-          for (var m in range)
+  for (var i in range(0, 5))
+    for (var j in range(0, 5))
+      for (var k in range(0, 5))
+        for (var l in range(0, 5))
+          for (var m in range(0, 5))
             phase_settings.add([i + low, j + low, k + low, l + low, m + low]);
 
-  return phase_settings;
+  return phase_settings
+      .where((phase_setting) => range(low, low + 5).every((number) =>
+          phase_setting.where((value) => value == number).length == 1))
+      .toList();
 }
 
 int day_7_part_1() {
   var data = _processInput();
   var phase_settings = generateSettings(0);
-  var computers = [
-    Computer(code: data),
-    Computer(code: data),
-    Computer(code: data),
-    Computer(code: data),
-    Computer(code: data)
-  ];
 
   int maximum = 0;
   for (var phase_setting in phase_settings) {
-    if (range.every((number) =>
-        phase_setting.where((value) => value == number).length == 1)) {
-      var output_1 = compute_thruster(phase_setting[0], 0);
-      var output_2 = compute_thruster(phase_setting[1], output_1);
-      var output_3 = compute_thruster(phase_setting[2], output_2);
-      var output_4 = compute_thruster(phase_setting[3], output_3);
-      var output_5 = compute_thruster(phase_setting[4], output_4);
+    //Create computers
+    var computers = phase_setting
+        .map((setting) => Computer(code: data)..addInput(setting))
+        .toList();
 
-      if (output_5 > maximum) {
-        maximum = output_5;
-      }
-    }
+    int output = computers.fold(
+        0, (acc, computer) => (computer..addInput(acc)).step_until_output());
+
+    maximum = max(maximum, output);
   }
 
   return maximum;
