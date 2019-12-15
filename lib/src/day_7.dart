@@ -30,7 +30,19 @@ List<List<int>> generateSettings(int low) {
       .toList();
 }
 
-int day_7_part_1() {
+int day_7_part_1() => generateSettings(0).fold(
+    0,
+    (maximum, phase_setting) => max(
+        maximum,
+        phase_setting
+            .map(
+                (setting) => Computer(code: _processInput())..addInput(setting))
+            .fold(
+                0,
+                (acc, computer) =>
+                    (computer..addInput(acc)).step_until_output())));
+
+int day_7_part_1_not_that_functional() {
   var data = _processInput();
   var phase_settings = generateSettings(0);
 
