@@ -8,3 +8,4 @@ export 'src/day_5.dart';
 export 'src/day_6.dart';
 export 'src/day_7.dart';
 export 'src/day_8.dart';
+export 'src/day_9.dart';
