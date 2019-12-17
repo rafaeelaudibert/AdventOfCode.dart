@@ -10,3 +10,4 @@ export 'src/day_7.dart';
 export 'src/day_8.dart';
 export 'src/day_9.dart';
 export 'src/day_10.dart';
+export 'src/day_11.dart';
