@@ -11,10 +11,6 @@ import 'computer.dart';
 List<int> _processInput() =>
     readFromFiles(day: 7, part: 1).split(',').map((i) => int.parse(i)).toList();
 
-// Global ranges helper
-List<int> range(int start, int end) =>
-    new List<int>.generate(end - start, (i) => i + start);
-
 List<List<int>> generateSettings(int low) {
   var phase_settings = List<List<int>>();
   for (var i in range(0, 5))

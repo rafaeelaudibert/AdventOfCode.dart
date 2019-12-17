@@ -10,3 +10,7 @@ import 'dart:io';
 /// readFromFiles(day: 2, part: 1);```
 String readFromFiles({day, part}) =>
     File('./lib/data/day_${day}_${part}.txt').readAsStringSync();
+
+// Return a range between start and end
+List<int> range(int start, int end) =>
+    new List<int>.generate(end - start, (i) => i + start);
