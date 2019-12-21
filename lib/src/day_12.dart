@@ -2,7 +2,6 @@
 ///
 /// Problem description can be seen [here](https://adventofcode.com/2019/day/12)
 import 'package:advent_of_code/helpers.dart';
-import 'dart:math';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].

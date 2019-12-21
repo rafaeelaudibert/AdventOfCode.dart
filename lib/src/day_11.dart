@@ -1,11 +1,9 @@
-import 'dart:io';
-import 'dart:math';
-
 /// Code for the solution of 2019 AoC, day 11.
 ///
 /// Problem description can be seen [here](https://adventofcode.com/2019/day/11)
 import 'package:advent_of_code/helpers.dart';
 import 'computer.dart';
+import 'dart:io';
 
 enum Color { Black, White }
 enum Facing { Up, Right, Bottom, Left }

@@ -1,9 +1,8 @@
-import 'dart:math';
-
 /// Code for the solution of 2019 AoC, day 10.
 ///
 /// Problem description can be seen [here](https://adventofcode.com/2019/day/10)
 import 'package:advent_of_code/helpers.dart';
+import 'dart:math';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
