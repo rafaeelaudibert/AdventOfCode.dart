@@ -56,6 +56,7 @@ class Computer {
   // Public functions
   bool get halted => _opcode == HALT_INSTRUCTION;
   void addInput(int input_value) => _inputs.addLast(input_value);
+  void clearInput() => this._inputs.clear();
   void resetPC() => _setPC(0);
   void reset() {
     _code = Map.from(_originalCode);
