@@ -15,3 +15,4 @@ export 'src/day_12.dart';
 export 'src/day_13.dart';
 export 'src/day_14.dart';
 export 'src/day_15.dart';
+export 'src/day_16.dart';
