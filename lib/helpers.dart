@@ -20,3 +20,16 @@ List<int> range(int start, int end) =>
 Iterable<T> sequence<T>(T seed, T next(T current) bool condition(T current)) sync* {
   for (var current = seed; condition(current); current = next(current)) yield current;
 }
+
+
+// Point class
+class Point {
+  int x, y;
+  Point(this.x, this.y);
+
+  int dist(Point p) => (p.x - this.x).abs() + (p.y + this.y).abs();
+
+  bool operator ==(covariant Point o) => o.x == this.x && o.y == this.y;
+  int get hashCode => this.x.hashCode ^ this.y.hashCode;
+  String toString() => '$x,$y';
+}

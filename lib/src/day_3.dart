@@ -13,17 +13,6 @@ List<String> _processInput() =>
 const Map<String, int> dirX = {'U': 0, 'D': 0, 'R': 1, 'L': -1};
 const Map<String, int> dirY = {'U': 1, 'D': -1, 'R': 0, 'L': 0};
 
-// Point class to help in the computation
-class Point {
-  int x, y;
-  Point(this.x, this.y);
-
-  int dist(Point p) => (p.x - this.x).abs() + (p.y + this.y).abs();
-
-  bool operator ==(o) => o.x == this.x && o.y == this.y;
-  int get hashCode => this.x.hashCode ^ this.y.hashCode;
-}
-
 // Given a list of rays, compute all the points on it
 Set<Point> getPointsSet(List<String> rays) {
   Set<Point> pointsSet = Set();
