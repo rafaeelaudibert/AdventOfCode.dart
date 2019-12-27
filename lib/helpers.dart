@@ -22,6 +22,14 @@ Iterable<T> sequence<T>(T seed, T next(T current) bool condition(T current)) syn
 }
 
 
+// Generate all the possible tuples from a list
+Iterable<List<T>> generate_tuples<T>(List<T> list) sync* {
+  for (var i in range(0, list.length))
+    for (var j in range(0, list.length))
+      if (i != j)
+        yield [list[i], list[j]];
+}
+
 // Point class
 class Point {
   int x, y;
