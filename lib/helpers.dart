@@ -14,3 +14,9 @@ String readFromFiles({day, part}) =>
 // Return a range between start and end
 List<int> range(int start, int end) =>
     new List<int>.generate(end - start, (i) => i + start);
+
+// Create a sequence, given an initial number and a seed,
+// until a condition is reached
+Iterable<T> sequence<T>(T seed, T next(T current) bool condition(T current)) sync* {
+  for (var current = seed; condition(current); current = next(current)) yield current;
+}
