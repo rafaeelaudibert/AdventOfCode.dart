@@ -23,7 +23,9 @@ void main(List<String> arguments) async {
       import "dart:isolate";
 
       void main(_, SendPort port) {
+        final Stopwatch timer = Stopwatch()..start();
         port.send(day_${day}_part_${part}().toString());
+        print("\${timer.elapsedMilliseconds}ms elapsed");
       }
       ''',
       mimeType: 'application/dart',
