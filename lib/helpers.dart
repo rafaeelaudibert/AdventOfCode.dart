@@ -39,5 +39,5 @@ class Point {
 
   bool operator ==(covariant Point o) => o.x == this.x && o.y == this.y;
   int get hashCode => this.x.hashCode ^ this.y.hashCode;
-  String toString() => '$x,$y';
+  String toString() => '<x=$x, y=$y>';
 }

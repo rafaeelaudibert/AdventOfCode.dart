@@ -19,3 +19,4 @@ export 'src/day_16.dart';
 export 'src/day_17.dart';
 export 'src/day_18.dart';
 export 'src/day_19.dart';
+export 'src/day_20.dart';
