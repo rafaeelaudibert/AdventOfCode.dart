@@ -1,8 +1,8 @@
-import 'dart:collection';
-
 /// Code for the IntCode computer for 2019 AoC.
 ///
 /// The AoC description can be seen [here](https://adventofcode.com/2019)
+import 'dart:collection';
+import 'dart:convert';
 
 class Computer {
   // Instruction which causes a HALT
@@ -64,6 +64,14 @@ class Computer {
     this._inputs.clear();
   }
 
+  // Ascii Helper functions
+  void addAsciiInput(String str) => str
+      .split('')
+      .forEach((input_value) => _inputs.addLast(ascii.encode(input_value)[0]));
+  String step_until_ascii_output() =>
+      String.fromCharCode(this.step_until_output() ?? 0);
+
+  // Step functions
   int step_until_output() {
     while (!halted) {
       int output = this.step();
