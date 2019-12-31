@@ -20,16 +20,24 @@ class Computer {
   Map<int, int> _code;
   Queue<int> _inputs = Queue();
 
+  // Debug
+  bool _debug;
+  int inputs_consumed = 0;
+
   // Constructors
-  Computer({List<int> code}) {
+  Computer({List<int> code, debug = false}) {
     this._originalCode = Map.from(code.asMap());
     this._code = Map.from(code.asMap());
+    this._debug = debug;
   }
 
   // Opcode and input getters
   String get _full_opcode => _code[_PC].toString().padLeft(5, '0');
   int get _opcode => int.parse(_full_opcode.substring(3));
-  int get _input => this._inputs.removeFirst();
+  int get _input {
+    this.inputs_consumed++;
+    return this._inputs.length > 0 ? this._inputs.removeFirst() : -1;
+  }
 
   // Read value from memory
   int _get(int addr, int mode) {
@@ -74,8 +82,16 @@ class Computer {
   // Step functions
   int step_until_output() {
     while (!halted) {
+      int inputs_consumed_before = this.inputs_consumed;
+      int curr_input = _inputs.length > 0 ? _inputs.first : null;
       int output = this.step();
+
+      // Return output correctly
       if (output != null) return output;
+
+      // Is waiting for some input
+      if (inputs_consumed_before < this.inputs_consumed && curr_input == null)
+        return null;
     }
 
     return null;
@@ -97,6 +113,11 @@ class Computer {
         int param_2 = this._get(_PC + 2, second_mode);
         this._set(
             this._get(_PC + 3, DIRECT_MODE), param_1 + param_2, third_mode);
+
+        if (_debug)
+          print(
+              'Summed $param_1 and $param_2 and stored at ${this._get(_PC + 3, DIRECT_MODE)}');
+
         this._increasePC(4);
         break;
       case 2: // Multiply
@@ -104,18 +125,33 @@ class Computer {
         int param_2 = this._get(_PC + 2, second_mode);
         this._set(
             this._get(_PC + 3, DIRECT_MODE), param_1 * param_2, third_mode);
+
+        if (_debug)
+          print(
+              'Summed $param_1 and $param_2 and stored at ${this._get(_PC + 3, DIRECT_MODE)}');
+
         this._increasePC(4);
         break;
       case 3: // Input
         this._set(this._get(_PC + 1, DIRECT_MODE), _input, first_mode);
+
+        if (_debug)
+          print(
+              'Stored ${this._get(_PC + 1, first_mode)} at ${this._get(_PC + 1, DIRECT_MODE)}');
+
         this._increasePC(2);
         break;
       case 4: // Output
         output = this._get(_PC + 1, first_mode);
+
+        if (_debug) print('Outputed $output');
+
         this._increasePC(2);
         break;
       case 5: // Jump if true
         int param_1 = this._get(_PC + 1, first_mode);
+
+        if (_debug) print('Jump if true with value $param_1');
 
         param_1 != 0
             ? this._setPC(this._get(_PC + 2, second_mode))
@@ -123,6 +159,8 @@ class Computer {
         break;
       case 6: // Jump if false
         int param_1 = this._get(_PC + 1, first_mode);
+
+        if (_debug) print('Jump if false with value $param_1');
 
         param_1 == 0
             ? this._setPC(this._get(_PC + 2, second_mode))
@@ -132,6 +170,8 @@ class Computer {
         int param_1 = this._get(_PC + 1, first_mode);
         int param_2 = this._get(_PC + 2, second_mode);
 
+        if (_debug) print('Check if $param_1 less than $param_2');
+
         this._set(this._get(_PC + 3, DIRECT_MODE), param_1 < param_2 ? 1 : 0,
             third_mode);
         this._increasePC(4);
@@ -140,18 +180,22 @@ class Computer {
         int param_1 = this._get(_PC + 1, first_mode);
         int param_2 = this._get(_PC + 2, second_mode);
 
+        if (_debug) print('Check if $param_1 equals to $param_2');
+
         this._set(this._get(_PC + 3, DIRECT_MODE), param_1 == param_2 ? 1 : 0,
             third_mode);
         this._increasePC(4);
         break;
       case 9: // Change relative base
         this._relative_base += this._get(_PC + 1, first_mode);
+
+        if (_debug) print('Relative base now at $_relative_base');
         this._increasePC(2);
         break;
       case HALT_INSTRUCTION:
         break;
       default:
-        print(_opcode);
+        if (_debug) print("Invalid opcode $_opcode");
         throw 'Invalid opcode';
     }
 
