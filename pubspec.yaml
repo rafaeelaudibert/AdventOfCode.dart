@@ -10,3 +10,4 @@ environment:
 dependencies:
   collection:
   tuple:
+  trotter:

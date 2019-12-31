@@ -24,3 +24,4 @@ export 'src/day_21.dart';
 export 'src/day_22.dart';
 export 'src/day_23.dart';
 export 'src/day_24.dart';
+export 'src/day_25.dart';
