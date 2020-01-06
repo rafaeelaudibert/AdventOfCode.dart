@@ -5,6 +5,10 @@ import 'package:advent_of_code/helpers.dart';
 import 'package:collection/collection.dart';
 import 'dart:collection';
 import 'package:tuple/tuple.dart';
+import 'dart:math';
+
+// Regex to find uppercase letters
+final RegExp portal_regex = new RegExp('[A-Z]');
 
 // FOR SOME WEIRD REASON, NEED TO REMOVE 1 LETTER FROM THE END,
 // PROBABLY BECAUSE OF WINDOWS /n/r, SO WE NEED TO ADD MANUALLY AN EXTRA SPACE
@@ -15,8 +19,6 @@ List<List<String>> _processInput() => readFromFiles(day: 20, part: 1)
     .split('\n')
     .map((str) => str.substring(0, str.length - 1).split(''))
     .toList();
-
-final RegExp portal_regex = new RegExp('[A-Z]');
 
 int djikstra(Map<String, Map<String, int>> graph, String start, String end) {
   PriorityQueue<Tuple2<String, int>> pq =
@@ -170,4 +172,89 @@ day_20_part_1() {
   return djikstra(graph, 'AA', 'ZZ') - 1;
 }
 
-day_20_part_2() => _processInput();
+// Translated from [/u/bla2](https://www.reddit.com/user/bla2/) Python3 code, available
+// [here](https://topaz.github.io/paste/#XQAAAQCDBwAAAAAAAAAzHIoib6pENkSmUIKIED8dy140D1lKWSU7djMRT1Zy3HFl2YwVCAZ0dUJT0cGTOmOnnqAN8eNRq3NaF3RBV6e9snmWMunIsY+MR0q8wqlCYP1OthBSjU8xj67Ncnl0SahUjgleue17877DcW1RVZMXmLYihJgRdrZxS3eRmLQu/lm6ZxZldPGzo0Ncj7q1wfE9yl/eamOLJsneKAmBxdCejQBgANCSF7+nkkk34PyDSV7pOT8ba5zOXQmRgs8UR2TrzBKhtW9BSih9zpyUWB4CI7cvscgc6mdK6dXYxZtrIpSw1HXUmgR+X9yCXVzSdjKQ0mxDTkd/Hn/c/IneF9eka6CUZthfAG+TEU+Ml2SimiS7IC6JrOZVA2PWgQKYW7tS8VtFRkdhQbeiqsQwk7QocomEB0qMR55srb4GCYWHNLfMjcffgdbLQSV0V/FitHRAPsH/JVgMGhwLlr2AgK+kvSDBMbJgvPvPkbKmPJvbnuFIvtbaV0PLOvYpH74Sx3797LUPuvGYhr92zpW1HOXGXVLlqH9YyQlE1k6WZNTIX50R//YBGiYf+O7xR82sr3b/PqPpAB8EU+SGmAtAO4f9rrOtiayf+gEj9poa+HyaEgLn7BmiUzRzmoXJqk4Xf0OsVEC7bIWJJFgav3eZ88N5tZDr5EotW7SLEGDTzMa7z3CpyLOtCl2iV34BJ973+WnBxQlZHC5f6BIfkEfilt/O0RRAbDKtKOgcDVn4gczewuIN+VLH1IcdaaErqeJ0FuLOZ0DoUxiGqI62Ac9u8tyEnUJwexs+TmuzG+7qlUcDY+z9FBXfy0XNPDrwddIyq80YQuNiYkzhrlFZiRjY3mw4E/ZBzUPZ3irQ+rVGrb50LT72GCrWZeMFAM/0vDt6tw/Jm0g1oYJ/KItNdiMS76aAR4mZon1vtjJ7+WFCFeSm90sY6tuC8U959ljwQsobiQ8b3Zwbi+rEAwtrOJIgte8QwP4Cpnb+QCMm)
+day_20_part_2() {
+  var data = _processInput();
+  var maze_y = data.length, maze_x = data[0].length;
+
+  // Find portals
+  Map<String, List<Tuple2<int, int>>> portals = {};
+  for (var y in range(0, maze_y - 1)) {
+    for (var x in range(0, maze_x - 1)) {
+      if (!portal_regex.hasMatch(data[y][x])) continue;
+
+      // Found match looking above
+      if (portal_regex.hasMatch(data[y + 1][x])) {
+        var c = data[y][x] + data[y + 1][x];
+        portals.putIfAbsent(c, () => List());
+        if (y > 0 && data[y - 1][x] == '.')
+          portals[c].add(Tuple2(x, y - 1));
+        else if (data[y + 2][x] == '.') portals[c].add(Tuple2(x, y + 2));
+      }
+
+      // Found match for the right
+      if (portal_regex.hasMatch(data[y][x + 1])) {
+        var c = data[y][x] + data[y][x + 1];
+        portals.putIfAbsent(c, () => List());
+        if (x > 0 && data[y][x - 1] == '.')
+          portals[c].add(Tuple2(x - 1, y));
+        else if (data[y][x + 2] == '.') portals[c].add(Tuple2(x + 2, y));
+      }
+    }
+  }
+
+  // Get src and dst positions
+  var src = portals['AA'].first;
+  var dst = portals['ZZ'].first;
+
+  // Find path
+  var q = Queue<Tuple3<Tuple2, int, int>>.from(
+      [Tuple3(src, 0, 0)]); // pos, level, dist
+  var seen = Set<Tuple3<int, int, int>>.from(
+      [Tuple3(src.item1, src.item2, 0)]); // pos x, pos y, level
+  while (q.isNotEmpty) {
+    var first_item = q.removeFirst();
+    var pos = first_item.item1;
+    var level = first_item.item2;
+    var dist = first_item.item3;
+
+    // If reached 'ZZ' on level 0, return the distance
+    if (pos == dst && level == 0) return dist;
+
+    for (var d in [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1]
+    ]) {
+      var dx = d[0], dy = d[1];
+      var nx = pos.item1 + dx, ny = pos.item2 + dy;
+      var new_level = level;
+      if (portal_regex.hasMatch(data[ny][nx])) {
+        var is_outer =
+            nx == 1 || ny == 1 || nx == maze_x - 2 || ny == maze_y - 2;
+        if (is_outer)
+          new_level -= 1;
+        else
+          new_level += 1;
+
+        var c = (data[min(ny, ny + dy)][min(nx, nx + dx)] +
+            data[max(ny, ny + dy)][max(nx, nx + dx)]);
+        if (!['AA', 'ZZ'].contains(c) && new_level >= 0) {
+          var looking_for_0 = pos == portals[c][0];
+          nx = portals[c][looking_for_0 ? 1 : 0].item1;
+          ny = portals[c][looking_for_0 ? 1 : 0].item2;
+        }
+      }
+
+      // Avoid loop
+      if (seen.contains(Tuple3(nx, ny, new_level))) continue;
+      seen.add(Tuple3(nx, ny, new_level));
+
+      // Add to search after
+      if (data[ny][nx] == '.')
+        q.add(Tuple3(Tuple2(nx, ny), new_level, dist + 1));
+    }
+  }
+}
