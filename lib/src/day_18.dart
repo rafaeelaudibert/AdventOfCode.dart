@@ -200,5 +200,3 @@ day_18_part_2() {
 
   return shortestPathMult;
 }
-
-void main() {}
