@@ -6,6 +6,7 @@ generateCode(int day) => '''
 ///
 /// Problem description can be seen [here](https://adventofcode.com/2019/day/$day)
 import 'package:advent_of_code/helpers.dart';
+import 'computer.dart';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
@@ -14,8 +15,13 @@ List<String> _processInput() =>
       .split('\\n')
       .toList();
     
-day_${day}_part_1() => _processInput();
-day_${day}_part_2() => _processInput();
+day_${day}_part_1() {
+  var data = _processInput();
+}
+
+day_${day}_part_2() {
+  var data = _processInput();
+}
 ''';
 
 /// Parse the argument and get day values. days within 1 to 25.
