@@ -48,3 +48,8 @@ extension ParseString on String {
   double toDouble() => double.parse(this);
 }
 
+/// [BigInt] related extension for [int]
+extension BigIntFromInt on int {
+  BigInt toBigInt() => BigInt.from(this);
+}
+
