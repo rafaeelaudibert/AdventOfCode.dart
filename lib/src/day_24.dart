@@ -50,11 +50,11 @@ day_24_part_2() {
       layouts.add(empty_layout());
   }
 
-  return count_bugs(layouts.map((layout) => stringify(layout)).toList());
+  return count_bugs(layouts.map(stringify).toList());
 }
 
 step(List<List<String>> old_layout) {
-  var new_layout = old_layout.map((list) => list.toList()).toList(); // Clone it
+  var new_layout = old_layout.clone(); // Clone it
 
   for (var y in range(0, 5)) {
     for (var x in range(0, 5)) {
@@ -79,7 +79,7 @@ step(List<List<String>> old_layout) {
 
 // Sorry for that
 step_recursive(List<List<List<String>>> old_layouts) {
-  var new_layouts = old_layouts.toList();
+  var new_layouts = old_layouts.clone();
 
   // Helper to check if there is a bug or not in a stringfied
   // layout representation
@@ -90,8 +90,7 @@ step_recursive(List<List<List<String>>> old_layouts) {
     var l = old_layouts[l_idx]; // Clone it
     var i = old_layouts[l_idx + 1];
 
-    var new_layout =
-        old_layouts[l_idx].map((list) => list.toList()).toList(); // Clone it
+    var new_layout = old_layouts[l_idx].clone();
 
     for (var y in range(0, 5)) {
       for (var x in range(0, 5)) {

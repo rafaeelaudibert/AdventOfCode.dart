@@ -6,7 +6,7 @@ import 'package:advent_of_code/helpers.dart';
 /// Read the raw [String] content from file and convert it to
 /// [List<int>].
 List<int> _processInput() =>
-    readFromFiles(day: 16, part: 1).split('').map((n) => int.parse(n)).toList();
+    readFromFiles(day: 16, part: 1).split('').map(int.parse).toList();
 
 const PATTERN = [0, 1, 0, -1];
 const NUM_PHASES = 100;
@@ -27,12 +27,12 @@ day_16_part_1() {
         acc += data[n] * pattern_multiplier;
       }
       String parsed_acc = "$acc";
-      int last_digit = int.parse(parsed_acc[parsed_acc.length - 1]);
+      int last_digit = parsed_acc[parsed_acc.length - 1].toInt();
 
       new_data[idx - 1] = last_digit;
     }
 
-    data = new_data.toList(); // Create copy
+    data = new_data.clone();
   }
 
   return data.take(MESSAGE_SIZE).join('');
@@ -48,7 +48,7 @@ day_16_part_2() {
       message_offset > data_length / 2, 'There is no fast way to solve this');
   var necessary_length = data_length - message_offset;
   var num_copies = (necessary_length / data.length).ceil();
-  data = List.generate(num_copies, (_) => data.toList())
+  data = List.generate(num_copies, (_) => data.clone())
       .expand((x) => x)
       .skip(data.length * num_copies - necessary_length)
       .toList();

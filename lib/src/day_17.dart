@@ -4,7 +4,6 @@
 import 'package:advent_of_code/helpers.dart';
 import 'computer.dart';
 import 'dart:io';
-import 'dart:convert';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
@@ -26,7 +25,7 @@ day_17_part_1() {
     if (output != '\n') {
       line.add(output);
     } else {
-      lines.add(line.toList()); // Create copy
+      lines.add(line.clone()); // Create copy
       line.clear();
     }
   }
