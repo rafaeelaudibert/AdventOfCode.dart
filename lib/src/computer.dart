@@ -3,6 +3,21 @@
 /// The AoC description can be seen [here](https://adventofcode.com/2019)
 import 'dart:collection';
 import 'dart:convert';
+import 'package:advent_of_code/helpers.dart';
+
+enum Opcode {
+  Add,
+  Multiply,
+  Input,
+  Output,
+  JumpIfTrue,
+  JumpIfFalse,
+  LessThan,
+  Equals,
+  ChangeRelativeBase,
+  Halt,
+  Invalid
+}
 
 class Computer {
   // Instruction which causes a HALT
@@ -33,13 +48,43 @@ class Computer {
 
   // Opcode and input getters
   String get _full_opcode => _code[_PC].toString().padLeft(5, '0');
-  int get _opcode => int.parse(_full_opcode.substring(3));
+  int _raw_opcode;
+  Opcode get _opcode {
+    this._raw_opcode = _full_opcode.substring(3).toInt();
+
+    switch (this._raw_opcode) {
+      case 1:
+        return Opcode.Add;
+      case 2:
+        return Opcode.Multiply;
+      case 3:
+        return Opcode.Input;
+      case 4:
+        return Opcode.Output;
+      case 5:
+        return Opcode.JumpIfTrue;
+      case 6:
+        return Opcode.JumpIfFalse;
+      case 7:
+        return Opcode.LessThan;
+      case 8:
+        return Opcode.Equals;
+      case 9:
+        return Opcode.ChangeRelativeBase;
+      case HALT_INSTRUCTION:
+        return Opcode.Halt;
+      default:
+        return Opcode.Invalid;
+    }
+  }
+
   int get _input {
     this.inputs_consumed++;
     return this._inputs.length > 0 ? this._inputs.removeFirst() : -1;
   }
 
   // Read value from memory
+  int _get_parameter(int parameter, int mode) => _get(_PC + parameter, mode);
   int _get(int addr, int mode) {
     switch (mode) {
       case INDIRECT_MODE:
@@ -62,7 +107,7 @@ class Computer {
   void _increasePC(int val) => _setPC(_PC + val);
 
   // Public functions
-  bool get halted => _opcode == HALT_INSTRUCTION;
+  bool get halted => _opcode == Opcode.Halt;
   void addInput(int input_value) => _inputs.addLast(input_value);
   void clearInput() => this._inputs.clear();
   void resetPC() => _setPC(0);
@@ -99,18 +144,18 @@ class Computer {
 
   int step() {
     // Read modes earlier
-    int first_mode = int.parse(this._full_opcode[2]);
-    int second_mode = int.parse(this._full_opcode[1]);
-    int third_mode = int.parse(this._full_opcode[0]);
+    int first_mode = this._full_opcode[2].toInt();
+    int second_mode = this._full_opcode[1].toInt();
+    int third_mode = this._full_opcode[0].toInt();
 
     // Configure output
     int output = null;
 
     // Run instruction
     switch (_opcode) {
-      case 1: // Add
-        int param_1 = this._get(_PC + 1, first_mode);
-        int param_2 = this._get(_PC + 2, second_mode);
+      case Opcode.Add:
+        int param_1 = _get_parameter(1, first_mode);
+        int param_2 = _get_parameter(2, second_mode);
         this._set(
             this._get(_PC + 3, DIRECT_MODE), param_1 + param_2, third_mode);
 
@@ -120,9 +165,9 @@ class Computer {
 
         this._increasePC(4);
         break;
-      case 2: // Multiply
-        int param_1 = this._get(_PC + 1, first_mode);
-        int param_2 = this._get(_PC + 2, second_mode);
+      case Opcode.Multiply:
+        int param_1 = _get_parameter(1, first_mode);
+        int param_2 = _get_parameter(2, second_mode);
         this._set(
             this._get(_PC + 3, DIRECT_MODE), param_1 * param_2, third_mode);
 
@@ -132,8 +177,8 @@ class Computer {
 
         this._increasePC(4);
         break;
-      case 3: // Input
-        this._set(this._get(_PC + 1, DIRECT_MODE), _input, first_mode);
+      case Opcode.Input:
+        this._set(this._get_parameter(1, DIRECT_MODE), _input, first_mode);
 
         if (_debug)
           print(
@@ -141,15 +186,15 @@ class Computer {
 
         this._increasePC(2);
         break;
-      case 4: // Output
-        output = this._get(_PC + 1, first_mode);
+      case Opcode.Output:
+        output = _get_parameter(1, first_mode);
 
         if (_debug) print('Outputed $output');
 
         this._increasePC(2);
         break;
-      case 5: // Jump if true
-        int param_1 = this._get(_PC + 1, first_mode);
+      case Opcode.JumpIfTrue:
+        int param_1 = _get_parameter(1, first_mode);
 
         if (_debug) print('Jump if true with value $param_1');
 
@@ -157,8 +202,8 @@ class Computer {
             ? this._setPC(this._get(_PC + 2, second_mode))
             : this._increasePC(3);
         break;
-      case 6: // Jump if false
-        int param_1 = this._get(_PC + 1, first_mode);
+      case Opcode.JumpIfFalse:
+        int param_1 = _get_parameter(1, first_mode);
 
         if (_debug) print('Jump if false with value $param_1');
 
@@ -166,9 +211,9 @@ class Computer {
             ? this._setPC(this._get(_PC + 2, second_mode))
             : this._increasePC(3);
         break;
-      case 7: // Less than
-        int param_1 = this._get(_PC + 1, first_mode);
-        int param_2 = this._get(_PC + 2, second_mode);
+      case Opcode.LessThan:
+        int param_1 = _get_parameter(1, first_mode);
+        int param_2 = _get_parameter(2, second_mode);
 
         if (_debug) print('Check if $param_1 less than $param_2');
 
@@ -176,9 +221,9 @@ class Computer {
             third_mode);
         this._increasePC(4);
         break;
-      case 8: // Equals
-        int param_1 = this._get(_PC + 1, first_mode);
-        int param_2 = this._get(_PC + 2, second_mode);
+      case Opcode.Equals:
+        int param_1 = _get_parameter(1, first_mode);
+        int param_2 = _get_parameter(2, second_mode);
 
         if (_debug) print('Check if $param_1 equals to $param_2');
 
@@ -186,16 +231,16 @@ class Computer {
             third_mode);
         this._increasePC(4);
         break;
-      case 9: // Change relative base
-        this._relative_base += this._get(_PC + 1, first_mode);
+      case Opcode.ChangeRelativeBase:
+        this._relative_base += this._get_parameter(1, first_mode);
 
         if (_debug) print('Relative base now at $_relative_base');
         this._increasePC(2);
         break;
-      case HALT_INSTRUCTION:
+      case Opcode.Halt:
         break;
       default:
-        if (_debug) print("Invalid opcode $_opcode");
+        if (_debug) print("Invalid opcode $_raw_opcode");
         throw 'Invalid opcode';
     }
 
