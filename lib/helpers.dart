@@ -40,3 +40,11 @@ class Point {
   int get hashCode => this.x.hashCode ^ this.y.hashCode;
   String toString() => '<x=$x, y=$y>';
 }
+
+/// [num] related extension for [String]
+extension ParseString on String {
+  int toInt() => int.parse(this);
+
+  double toDouble() => double.parse(this);
+}
+
