@@ -10,24 +10,22 @@ enum Facing { Up, Right, Bottom, Left }
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
-List<int> _processInput() => readFromFiles(day: 11, part: 1)
-    .split(',')
-    .map((n) => int.parse(n))
-    .toList();
+List<int> _processInput() =>
+    readFromFiles(day: 11, part: 1).split(',').map(int.parse).toList();
 
 String updatePosition(String position, Facing facing) {
   switch (facing) {
     case Facing.Up:
-      return "${position.split(',')[0]},${int.parse(position.split(',')[1]) + 1}";
+      return "${position.split(',')[0]},${position.split(',')[1].toInt() + 1}";
     case Facing.Right:
-      return "${int.parse(position.split(',')[0]) + 1},${position.split(',')[1]}";
+      return "${position.split(',')[0].toInt() + 1},${position.split(',')[1]}";
     case Facing.Bottom:
-      return "${position.split(',')[0]},${int.parse(position.split(',')[1]) - 1}";
+      return "${position.split(',')[0]},${position.split(',')[1].toInt() - 1}";
     case Facing.Left:
-      return "${int.parse(position.split(',')[0]) - 1},${position.split(',')[1]}";
+      return "${position.split(',')[0].toInt() - 1},${position.split(',')[1]}";
+    default:
+      throw FallThroughError();
   }
-
-  throw FallThroughError();
 }
 
 Facing updateFacing(Facing facing, int direction) {

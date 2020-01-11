@@ -17,11 +17,11 @@ Map<String, Map<String, int>> _parseInput(List<String> input) {
     var sides = line.split('=>');
     var components = sides[0].trim().split(', ');
     var result_component = sides[1].trim().split(' ')[1];
-    var result_quantity = int.parse(sides[1].trim().split(' ')[0]);
+    var result_quantity = sides[1].trim().split(' ')[0].toInt();
 
     Map<String, int> components_map = Map();
     for (var component in components) {
-      var quantity = int.parse(component.split(' ')[0]);
+      var quantity = component.split(' ')[0].toInt();
       var component_name = component.split(' ')[1];
 
       components_map[component_name] = quantity;

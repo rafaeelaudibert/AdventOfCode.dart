@@ -6,9 +6,10 @@ import 'package:advent_of_code/helpers.dart';
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
 List<int> _processInput() => readFromFiles(day: 4, part: 1)
-    .split('\n')[0]
+    .split('\n')
+    .first
     .split('-')
-    .map((i) => int.parse(i))
+    .map(int.parse)
     .toList();
 
 List<String> validOnes(int r1, int r2) {
@@ -21,7 +22,7 @@ List<String> validOnes(int r1, int r2) {
 
     for (var l = 1; l < text.length; l++) {
       if (text[l] == text[l - 1]) two_adjacent = true;
-      if (int.parse(text[l]) < int.parse(text[l - 1])) can = false;
+      if (text[l].toInt() < text[l - 1].toInt()) can = false;
     }
 
     if (can && two_adjacent) valids.add(text);

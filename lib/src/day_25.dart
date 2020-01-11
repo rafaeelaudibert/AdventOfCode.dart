@@ -62,7 +62,7 @@ day_25_part_1() {
     if (int.tryParse(output) != null) str_output += output;
   }
 
-  return int.parse(str_output);
+  return str_output.toInt();
 }
 
 day_25_part_2() => _processInput();

@@ -8,10 +8,8 @@ import 'dart:math';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
-List<int> _processInput() => readFromFiles(day: 15, part: 1)
-    .split(',')
-    .map((str) => int.parse(str))
-    .toList();
+List<int> _processInput() =>
+    readFromFiles(day: 15, part: 1).split(',').map(int.parse).toList();
 
 const String AIR = ' ', WALL = '#', OXYGEN = '@';
 const int NORTH = 1, SOUTH = 2, WEST = 3, EAST = 4;
@@ -21,12 +19,9 @@ var data = _processInput();
 var computer = Computer(code: data);
 
 exploreMapDFS(int x, int y, int dir_came_from) {
-  // print("$x,$y came from $dir_came_from");
-
+  // Go to NORTH
   if (dir_came_from != NORTH) {
-    // Go to North
     var output = (computer..addInput(NORTH)).step_until_output();
-    // print("Going to North, received output $output");
 
     if (output == 0) {
       map['${x},${y + 1}'] = WALL;
@@ -39,10 +34,9 @@ exploreMapDFS(int x, int y, int dir_came_from) {
     }
   }
 
+  // Go to SOUTH
   if (dir_came_from != SOUTH) {
-    // Go to South
     var output = (computer..addInput(SOUTH)).step_until_output();
-    // print("Going to SOUTH, received output $output");
 
     if (output == 0) {
       map['${x},${y - 1}'] = WALL;
@@ -55,10 +49,9 @@ exploreMapDFS(int x, int y, int dir_came_from) {
     }
   }
 
+  // Go to WEST
   if (dir_came_from != WEST) {
-    // Go to WEST
     var output = (computer..addInput(WEST)).step_until_output();
-    // print("Going to WEST, received output $output");
 
     if (output == 0) {
       map['${x - 1},${y}'] = WALL;
@@ -71,10 +64,9 @@ exploreMapDFS(int x, int y, int dir_came_from) {
     }
   }
 
+  // Go to EAST
   if (dir_came_from != EAST) {
-    // Go to EAST
     var output = (computer..addInput(EAST)).step_until_output();
-    // print("Going to EAST, received output $output");
 
     if (output == 0) {
       map['${x + 1},${y}'] = WALL;
@@ -113,8 +105,8 @@ day_15_part_1() {
     var floodDepth = floodFillDepth.removeFirst();
     visited.add(floodTo);
 
-    var x = int.parse(floodTo.split(',')[0]);
-    var y = int.parse(floodTo.split(',')[1]);
+    var x = floodTo.split(',')[0].toInt();
+    var y = floodTo.split(',')[1].toInt();
 
     if (map[floodTo] == OXYGEN) {
       return floodDepth;
@@ -155,8 +147,8 @@ day_15_part_2() {
     visited.add(floodTo); // Mark visited
     maximum_depth = max(maximum_depth, floodDepth); // Increase total depth
 
-    var x = int.parse(floodTo.split(',')[0]);
-    var y = int.parse(floodTo.split(',')[1]);
+    var x = floodTo.split(',')[0].toInt();
+    var y = floodTo.split(',')[1].toInt();
 
     if (map[floodTo] == WALL) {
       continue;

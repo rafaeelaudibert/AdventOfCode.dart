@@ -8,7 +8,7 @@ import 'dart:math';
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
 List<int> _processInput() =>
-    readFromFiles(day: 7, part: 1).split(',').map((i) => int.parse(i)).toList();
+    readFromFiles(day: 7, part: 1).split(',').map(int.parse).toList();
 
 List<List<int>> generateSettings(int low) {
   var phase_settings = List<List<int>>();

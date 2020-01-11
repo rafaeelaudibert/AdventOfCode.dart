@@ -6,10 +6,8 @@ import 'computer.dart';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<int>].
-List<int> _processInput() => readFromFiles(day: 13, part: 1)
-    .split(',')
-    .map((n) => int.parse(n))
-    .toList();
+List<int> _processInput() =>
+    readFromFiles(day: 13, part: 1).split(',').map(int.parse).toList();
 
 day_13_part_1() {
   var data = _processInput();

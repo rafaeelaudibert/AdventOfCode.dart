@@ -11,10 +11,10 @@ enum Shuffle { DealIncrement, Cut, DealStack }
 List<Tuple2<Shuffle, int>> _processInput() =>
     readFromFiles(day: 22, part: 1).split('\n').map((instr) {
       if (instr.contains('increment'))
-        return Tuple2(Shuffle.DealIncrement, int.parse(instr.split(' ').last));
+        return Tuple2(Shuffle.DealIncrement, instr.split(' ').last.toInt());
 
       if (instr.contains('cut'))
-        return Tuple2(Shuffle.Cut, int.parse(instr.split(' ').last));
+        return Tuple2(Shuffle.Cut, instr.split(' ').last.toInt());
 
       if (instr.contains('stack')) return Tuple2(Shuffle.DealStack, 0);
 

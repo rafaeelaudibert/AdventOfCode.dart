@@ -19,9 +19,9 @@ class Moon {
   int v_x = 0, v_y = 0, v_z = 0;
 
   Moon(String input) {
-    this.x = int.parse(get_integer.firstMatch(input.split(',')[0]).group(0));
-    this.y = int.parse(get_integer.firstMatch(input.split(',')[1]).group(0));
-    this.z = int.parse(get_integer.firstMatch(input.split(',')[2]).group(0));
+    this.x = get_integer.firstMatch(input.split(',')[0]).group(0).toInt();
+    this.y = get_integer.firstMatch(input.split(',')[1]).group(0).toInt();
+    this.z = get_integer.firstMatch(input.split(',')[2]).group(0).toInt();
   }
 
   Moon.with_cords(this.x, this.y, this.z);

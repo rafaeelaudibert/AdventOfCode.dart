@@ -20,9 +20,9 @@ Set<Point> getPointsSet(List<String> rays) {
 
   for (var ray in rays) {
     var direction = ray[0];
-    var quantity = int.parse(ray.substring(1));
+    var quantity = ray.substring(1).toInt();
 
-    for (var i = 0; i < quantity; i++) {
+    for (var _ in range(0, quantity)) {
       currentPoint = Point(
           currentPoint.x + dirX[direction], currentPoint.y + dirY[direction]);
       pointsSet.add(currentPoint);
@@ -39,7 +39,7 @@ int distUntil(List<String> rays, Point p) {
 
   for (var ray in rays) {
     var direction = ray[0];
-    var quantity = int.parse(ray.substring(1));
+    var quantity = ray.substring(1).toInt();
 
     for (var i = 0; i < quantity; i++, counter++) {
       currentPoint = Point(
