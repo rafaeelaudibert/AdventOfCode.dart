@@ -15,14 +15,7 @@ int day_5_part_2({int input = 5}) {
   Computer intMachine = Computer(code: _processInput())..addInput(input);
   int last_output = null;
 
-  while (!intMachine.halted) {
-    int output = intMachine.step();
-
-    if (output != null) {
-      last_output = output;
-      print(output);
-    }
-  }
+  while (!intMachine.halted) last_output = intMachine.step_until_output();
 
   return last_output;
 }
