@@ -59,8 +59,8 @@ day_22_part_1() {
 day_22_part_2() {
   var data = _processInput();
 
-  var L = BigInt.from(119315717514047);
-  var N = BigInt.from(101741582076661);
+  var L = 119315717514047.toBigInt();
+  var N = 101741582076661.toBigInt();
   return shuffle2(L, N, 2020, data);
 }
 
@@ -70,7 +70,7 @@ Tuple2<BigInt, BigInt> parse(BigInt L, List<Tuple2<Shuffle, int>> shuffles) {
   var a = BigInt.one, b = BigInt.zero;
   for (var shuffle in shuffles.reversed) {
     var shuffle_type = shuffle.item1;
-    var quantity = BigInt.from(shuffle.item2);
+    var quantity = shuffle.item2.toBigInt();
 
     switch (shuffle_type) {
       case Shuffle.DealIncrement:
