@@ -53,3 +53,15 @@ extension BigIntFromInt on int {
   BigInt toBigInt() => BigInt.from(this);
 }
 
+/// Clone methods for [Iterable<T>], [List<T>] and [List<List<T>>]
+extension ClonableList<T> on List<T> {
+  List<T> clone() => this.toList();
+}
+
+extension ClonableIterable<T> on Iterable<T> {
+  List<T> clone() => this.toList();
+}
+
+extension ClonableListList<T> on List<List<T>> {
+  List<List<T>> clone() => this.map((list) => list.clone()).clone();
+}
