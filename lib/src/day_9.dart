@@ -14,10 +14,7 @@ day_9_part_1({input: 1}) {
   var computer = Computer(code: data)..addInput(input);
 
   int output = 0;
-  while (!computer.halted) {
-    output = computer.step_until_output();
-    print(output); // To see errors
-  }
+  while (!computer.halted) output = computer.step_until_output();
 
   return output;
 }
