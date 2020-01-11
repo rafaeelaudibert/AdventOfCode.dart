@@ -7,6 +7,7 @@ import 'dart:io';
 
 enum Color { Black, White }
 enum Facing { Up, Right, Bottom, Left }
+enum Direction { Left, Right }
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
@@ -28,8 +29,8 @@ String updatePosition(String position, Facing facing) {
   }
 }
 
-Facing updateFacing(Facing facing, int direction) {
-  if (direction == 0) {
+Facing updateFacing(Facing facing, Direction direction) {
+  if (direction == Direction.Left) {
     switch (facing) {
       case Facing.Up:
         return Facing.Left;
@@ -40,7 +41,7 @@ Facing updateFacing(Facing facing, int direction) {
       case Facing.Left:
         return Facing.Bottom;
     }
-  } else {
+  } else if (direction == Direction.Right) {
     switch (facing) {
       case Facing.Up:
         return Facing.Right;
@@ -70,7 +71,8 @@ Map<String, Color> paintShip({Color initial_position = Color.Black}) {
             ? 0
             : 1);
     int output = computer.step_until_output();
-    int direction = computer.step_until_output();
+    Direction direction =
+        computer.step_until_output() == 0 ? Direction.Left : Direction.Right;
 
     // Update color
     positions[position] = output == 0 ? Color.Black : Color.White;
