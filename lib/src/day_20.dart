@@ -89,8 +89,7 @@ day_20_part_1() {
   for (var portal in portals.values.toSet().toList()) {
     List<Point> portal_positions = portals.entries
         .where((point_string) => point_string.value == portal)
-        .map((entry) => entry.key)
-        .toList();
+        .map((entry) => entry.key);
 
     for (var portal_position in portal_positions) {
       Queue<Tuple2<Point, int>> to_search = Queue();
