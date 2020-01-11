@@ -11,13 +11,14 @@ List<int> _processInput() =>
     readFromFiles(day: 7, part: 1).split(',').map(int.parse).toList();
 
 List<List<int>> generateSettings(int low) {
-  var phase_settings = List<List<int>>();
-  for (var i in range(0, 5))
-    for (var j in range(0, 5))
-      for (var k in range(0, 5))
-        for (var l in range(0, 5))
-          for (var m in range(0, 5))
-            phase_settings.add([i + low, j + low, k + low, l + low, m + low]);
+  List<List<int>> phase_settings = [
+    for (var i in range(0, 5))
+      for (var j in range(0, 5))
+        for (var k in range(0, 5))
+          for (var l in range(0, 5))
+            for (var m in range(0, 5))
+              [i + low, j + low, k + low, l + low, m + low]
+  ];
 
   return phase_settings
       .where((phase_setting) => range(low, low + 5).every((number) =>
@@ -44,9 +45,8 @@ int day_7_part_1_not_that_functional() {
   int maximum = 0;
   for (var phase_setting in phase_settings) {
     //Create computers
-    var computers = phase_setting
-        .map((setting) => Computer(code: data)..addInput(setting))
-        .toList();
+    var computers =
+        phase_setting.map((setting) => Computer(code: data)..addInput(setting));
 
     int output = computers.fold(
         0, (acc, computer) => (computer..addInput(acc)).step_until_output());

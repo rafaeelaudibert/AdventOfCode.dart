@@ -29,7 +29,7 @@ int exploreGraph(String planet, int depth) {
 
 String findOrbiting(String search) =>
     graph.keys.firstWhere((entry) => graph[entry].contains(search),
-      orElse: () => 'COM_PARENT_THAT_DOESNT_EXIST');
+        orElse: () => 'COM_PARENT_THAT_DOESNT_EXIST');
 
 day_6_part_1() {
   createGraph();
