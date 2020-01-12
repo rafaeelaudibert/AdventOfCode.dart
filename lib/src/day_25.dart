@@ -4,7 +4,6 @@
 import 'package:advent_of_code/helpers.dart';
 import 'package:trotter/trotter.dart';
 import 'computer.dart';
-import 'dart:io';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<int>].
@@ -65,4 +64,4 @@ day_25_part_1() {
   return str_output.toInt();
 }
 
-day_25_part_2() => _processInput();
+day_25_part_2() => 'HAPPY ADVENT OF CODE!';

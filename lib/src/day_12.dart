@@ -4,9 +4,8 @@
 import 'package:advent_of_code/helpers.dart';
 
 /// Read the raw [String] content from file and convert it to
-/// [List<String>].
-List<String> _processInput() =>
-    readFromFiles(day: 12, part: 1).split('\n').toList();
+/// [Iterable<String>].
+Iterable<String> _processInput() => readFromFiles(day: 12, part: 1).split('\n');
 
 // LCM helper
 int lcm(int a, int b) => a * b ~/ a.gcd(b);

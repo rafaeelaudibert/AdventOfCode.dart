@@ -5,11 +5,10 @@ import 'package:advent_of_code/helpers.dart';
 import 'dart:collection';
 
 /// Read the raw [String] content from file and convert it to
-/// [List<String>].
-List<String> _processInput() =>
-    readFromFiles(day: 14, part: 1).split('\n').toList();
+/// [Iterable<String>].
+Iterable<String> _processInput() => readFromFiles(day: 14, part: 1).split('\n');
 
-Map<String, Map<String, int>> _parseInput(List<String> input) {
+Map<String, Map<String, int>> _parseInput(Iterable<String> input) {
   Map<String, Map<String, int>> output = Map();
 
   output['ORE'] = {'__qtd': 1};
@@ -19,7 +18,7 @@ Map<String, Map<String, int>> _parseInput(List<String> input) {
     var result_component = sides[1].trim().split(' ')[1];
     var result_quantity = sides[1].trim().split(' ')[0].toInt();
 
-    Map<String, int> components_map = Map();
+    Map<String, int> components_map = {};
     for (var component in components) {
       var quantity = component.split(' ')[0].toInt();
       var component_name = component.split(' ')[1];

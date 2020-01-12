@@ -11,9 +11,7 @@ import 'computer.dart';
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
 List<String> _processInput() =>
-    readFromFiles(day: $day, part: 1)
-      .split('\\n')
-      .toList();
+    readFromFiles(day: $day, part: 1).split('\\n').toList();
     
 day_${day}_part_1() {
   var data = _processInput();

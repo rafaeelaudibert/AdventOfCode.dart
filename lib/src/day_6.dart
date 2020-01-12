@@ -5,11 +5,10 @@ import 'package:advent_of_code/helpers.dart';
 import 'dart:collection';
 
 /// Read the raw [String] content from file and convert it to
-/// [List<String>].
-List<String> _processInput() => readFromFiles(day: 6, part: 1)
+/// [Iterable<String>].
+Iterable<String> _processInput() => readFromFiles(day: 6, part: 1)
     .split('\n')
-    .map((String str) => str.substring(0, str.length - 1))
-    .toList();
+    .map((String str) => str.substring(0, str.length - 1));
 
 var graph = HashMap<String, List<String>>();
 
@@ -22,10 +21,8 @@ void createGraph() {
   });
 }
 
-int exploreGraph(String planet, int depth) {
-  return graph[planet].fold(
-      depth, (acc, next_planet) => acc + exploreGraph(next_planet, depth + 1));
-}
+int exploreGraph(String planet, int depth) => graph[planet].fold(
+    depth, (acc, next_planet) => acc + exploreGraph(next_planet, depth + 1));
 
 String findOrbiting(String search) =>
     graph.keys.firstWhere((entry) => graph[entry].contains(search),
@@ -75,5 +72,5 @@ day_6_part_2() {
         .map((planet) => [planet, depth + 1]));
   }
 
-  return 'oops';
+  throw FallThroughError();
 }

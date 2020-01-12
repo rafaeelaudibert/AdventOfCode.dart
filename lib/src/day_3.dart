@@ -6,8 +6,7 @@ import 'dart:math';
 
 /// Read the raw [String] content from file and convert it to
 /// [List<String>].
-List<String> _processInput() =>
-    readFromFiles(day: 3, part: 1).split('\n').toList();
+List<String> _processInput() => readFromFiles(day: 3, part: 1).split('\n');
 
 // Global direction maps
 const Map<String, int> dirX = {'U': 0, 'D': 0, 'R': 1, 'L': -1};

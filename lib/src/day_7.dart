@@ -6,7 +6,7 @@ import 'computer.dart';
 import 'dart:math';
 
 /// Read the raw [String] content from file and convert it to
-/// [List<String>].
+/// [List<int>].
 List<int> _processInput() =>
     readFromFiles(day: 7, part: 1).split(',').map(int.parse).toList();
 

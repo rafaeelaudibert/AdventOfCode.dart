@@ -4,9 +4,9 @@
 import 'package:advent_of_code/helpers.dart';
 
 /// Read the raw [String] content from file and convert it to
-/// [List<String>].
+/// [List<int>].
 List<int> _processInput() =>
-    readFromFiles(day: 2, part: 1).split(',').map(int.parse).toList();
+    readFromFiles(day: 2, part: 1).split(',').map(int.parse);
 
 int day_2_part_1({noun = 12, verb = 2}) {
   var data = _processInput();

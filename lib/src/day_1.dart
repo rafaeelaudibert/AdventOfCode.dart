@@ -4,12 +4,9 @@
 import 'package:advent_of_code/helpers.dart';
 
 /// Read the raw [String] content from file and convert it to
-/// [List<int>].
-List<int> _processInput() =>
-    readFromFiles(day: 1, part: 1).split('\n').map(int.parse).toList();
-
-int totalFuel_part_1 = 0;
-int totalFuel_part_2 = 0;
+/// [Iterable<int>].
+Iterable<int> _processInput() =>
+    readFromFiles(day: 1, part: 1).split('\n').map(int.parse);
 
 int addFuel(int mass) {
   int fuel = (mass / 3).floor() - 2;
