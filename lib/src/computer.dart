@@ -52,30 +52,13 @@ class Computer {
   Opcode get _opcode {
     this._raw_opcode = _full_opcode.substring(3).toInt();
 
-    switch (this._raw_opcode) {
-      case 1:
-        return Opcode.Add;
-      case 2:
-        return Opcode.Multiply;
-      case 3:
-        return Opcode.Input;
-      case 4:
-        return Opcode.Output;
-      case 5:
-        return Opcode.JumpIfTrue;
-      case 6:
-        return Opcode.JumpIfFalse;
-      case 7:
-        return Opcode.LessThan;
-      case 8:
-        return Opcode.Equals;
-      case 9:
-        return Opcode.ChangeRelativeBase;
-      case HALT_INSTRUCTION:
-        return Opcode.Halt;
-      default:
-        return Opcode.Invalid;
-    }
+    // Minus 2 because of halt and invalid
+    if (this._raw_opcode <= Opcode.values.length - 2)
+      return Opcode.values[this._raw_opcode - 1];
+
+    if (this._raw_opcode == HALT_INSTRUCTION) return Opcode.Halt;
+
+    return Opcode.Invalid;
   }
 
   int get _input {
